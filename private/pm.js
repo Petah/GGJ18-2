@@ -5,8 +5,17 @@ const {
 } = require('child_process');
 const fs = require('fs');
 
-const httpServer = spawn(`http-server.cmd`, [`${__dirname}/../public`, '-c-1'], {
-    cwd: `${__dirname}/../node_modules/.bin`,
+const nodeModulesBin = `${__dirname}/../node_modules/.bin/`;
+let httpServerBin = 'http-server.cmd';
+// if (fs.statSync(httpServer))
+try {
+    fs.statSync(nodeModulesBin + httpServerBin)
+} catch (e) {
+    httpServerBin = 'http-server';
+}
+
+const httpServer = spawn(httpServerBin, [`${__dirname}/../public`, '-c-1'], {
+    cwd: nodeModulesBin,
 });
 
 httpServer.stdout.on('data', function (data) {
@@ -83,4 +92,25 @@ const spawnGameServer = () => {
 
 new Watcher(__dirname).run(() => {
     spawnGameServer();
+});
+
+process.on('SIGINT', () => {
+    if (gameServer) {
+        gameServer.kill();
+    }
+    process.exit(0);
+});
+
+process.on('SIGTERM', () => {
+    if (gameServer) {
+        gameServer.kill();
+    }
+    process.exit(0);
+});
+
+process.on('exit', () => {
+    if (gameServer) {
+        gameServer.kill();
+    }
+    process.stdout.write('Exiting...\n\n');
 });

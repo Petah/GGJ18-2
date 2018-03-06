@@ -6,16 +6,16 @@ module.exports = class SvgRenderer {
         document.body.appendChild(this.svg);
 
         this.sprites = {};
+
+        this.loadSvgs();
     }
 
-    moveSprite(id, x, y, layer, spriteAsset) {
+    moveSprite(id, x, y, rotation, layer, spriteAsset) {
         if (!this.sprites[id]) {
-            this.sprites[id] = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            this.sprites[id] = this.svgs.spaceShip.cloneNode(true);
             this.svg.appendChild(this.sprites[id]);
         }
-        this.sprites[id].setAttribute('r', 10);
-        this.sprites[id].setAttribute('cx', x);
-        this.sprites[id].setAttribute('cy', y);
+        this.sprites[id].setAttribute('transform', `translate(${x} ${y}) rotate(${rotation})`);
     }
 
     cullSprites(gameObjects) {
@@ -43,6 +43,23 @@ module.exports = class SvgRenderer {
 
     moveCamera(x, y, zoom) {
 
+    }
+
+    loadSvgs() {
+        this.svgs = {};
+        this.loadSvg('/images/space-ship.svg').then(svg => this.svgs.spaceShip = svg);
+    }
+
+    async loadSvg(url) {
+        const response = await fetch(url);
+        const svgText = await response.text();
+        const svgNode = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+        const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        group.setAttribute('transform-origin', '50 50');
+        while (svgNode.firstChild.firstChild) {
+            group.appendChild(svgNode.firstChild.firstChild);
+        }
+        return group;
     }
 
     get width() {

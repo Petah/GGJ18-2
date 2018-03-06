@@ -48,14 +48,14 @@ Keyboard.TAB = 9;
 
 document.addEventListener('keydown', (event) => {
     Keyboard.buttons[event.which] = true;
-    if (!event.ctrlKey && event.which < 122) {
+    if (!event.metaKey && !event.ctrlKey && event.which < 122) {
         event.preventDefault();
     }
 });
 
 document.addEventListener('keyup', (event) => {
     Keyboard.buttons[event.which] = false;
-    if (!event.ctrlKey && event.which < 122) {
+    if (!event.metaKey && !event.ctrlKey && event.which < 122) {
         event.preventDefault();
     }
 });
