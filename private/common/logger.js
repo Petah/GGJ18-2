@@ -6,4 +6,8 @@ module.exports = class Logger {
     log(...args) {
         console.log(this.fileName, ...args);
     }
+
+    error(...args) {
+        console.error(this.fileName, ...args);
+    }
 };

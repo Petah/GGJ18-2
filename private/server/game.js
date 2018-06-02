@@ -71,21 +71,22 @@ module.exports = class Game {
     }
 
     loop() {
+        this.server.loop();
         let g = this.gameObjects.length;
         while (g--) {
             this.gameObjects[g].loop();
         }
     }
 
-    reset() {
-        logger.log('Game reset');
-        this.gameObjects = [];
-        this.gameObjects.push(this.server);
+    // reset() {
+    //     logger.log('Game reset');
+    //     this.gameObjects = [];
+    //     this.gameObjects.push(this.server);
 
-        const team = new Team(this, 1);
-        this.gameObjects.push(team);
-        this.teams.push(team);
-    }
+    //     const team = new Team(this, 1);
+    //     this.gameObjects.push(team);
+    //     this.teams.push(team);
+    // }
 
     removeGameObject(gameObject) {
         this.gameObjectsToRemove.push(gameObject.id);
