@@ -1,6 +1,7 @@
 const logger = new (require('../common/logger'))(__filename);
 const Player = require('./player');
 const WebSocket = require('ws');
+const GameMath = require('../common/game-math');
 
 module.exports = class Client {
     constructor(game, server, webSocketClient, id) {
@@ -46,7 +47,11 @@ module.exports = class Client {
                         this.game.teams[0].nextUnit(player);
                     }
                     if (player && player.unit) {
-                        player.unit.accelerate(message.data.move.x, message.data.move.y);
+                        // player.unit.motionAdd(message.data.move.y, player.unit.rotation);
+                        const xAcceleration = GameMath.lengthDirX(message.data.move.y, player.unit.rotation);
+                        const yAcceleration = GameMath.lengthDirY(message.data.move.y, player.unit.rotation);
+                        player.unit.accelerate(xAcceleration, yAcceleration);
+                        player.unit.rotate(message.data.move.x);
                         player.unit.shooting = message.data.shoot;
                     }
                     break;
@@ -122,6 +127,7 @@ module.exports = class Client {
                     this.game.gameObjects[i].id,
                     this.game.gameObjects[i].x,
                     this.game.gameObjects[i].y,
+                    this.game.gameObjects[i].rotation,
                     this.game.gameObjects[i].layer,
                     this.game.gameObjects[i].sprite,
                     this.game.gameObjects[i].moving,
