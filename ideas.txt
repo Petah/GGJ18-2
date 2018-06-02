@@ -1,0 +1,5 @@
+space zombie type game
+ - zombie swarm ships attach space station, must defend and search for resources etc
+ - maybe slime type enemy
+ - energy based or liquid based faction
+ - land on planets, build defence and resources

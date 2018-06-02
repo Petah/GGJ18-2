@@ -1,5 +1,5 @@
 const logger = new (require('../common/logger'))(__filename);
-const Server = require('./server');
+const Server = require('./server-udp');
 const Team = require('./team');
 
 module.exports = class Game {

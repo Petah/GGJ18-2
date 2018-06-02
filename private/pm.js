@@ -65,6 +65,7 @@ class Watcher {
         }, 100);
     }
 }
+
 let gameServer;
 const spawnGameServer = () => {
     if (gameServer) {
